@@ -218,6 +218,7 @@ class App(ttk.Frame):
         ff = ''
         for i in self.matrizpronostico:
             self.lbdatosPred.insert('end', round(i,4))
+##        self.lisdatosR.itemconfigure('end', bg="#00aa00", fg="#fff")
             
     def convertir_a_minutos(self):
         
@@ -230,7 +231,8 @@ class App(ttk.Frame):
             print('error conversión dato')
     def iniciarPrediccion(self):
         self.convertir_a_minutos()
-        
+        self.lbdatosPred.delete(0, 'end')
+        self.lisdatosR.delete(0, 'end')
         if (self.matrizdatos is not None and self.matrizdatos != '' ) and (self.matrizdatosb is not None and  self.matrizdatosb != '') and (self.entrytimevar > 0):
             
             matrizdatos = self.matrizdatos.copy()
@@ -253,7 +255,10 @@ class App(ttk.Frame):
             messagebox.showerror(title='Error', message=msj)
     def reporte(self):
         if(self.matrizpronostico is not None) and (self.matrizreal is not None):
-            self.t2 = thread.Thread(target=generarPDF, args=(self.matrizreal, self.matrizpronostico))
+            
+            R2_ = self.lisdatosR.get(self.lisdatosR.size()-1)
+    
+            self.t2 = thread.Thread(target=generarPDF, args=(self.matrizreal, self.matrizdatosb, self.matrizpronostico,R2_))
             self.t2.start()
 ##            generarPDF(self.matrizreal,self.matrizpronostico)
         else:
